@@ -9,3 +9,7 @@ main {
   display: flex;
   flex-direction: row;
 }
+
+.sandworm {
+  background-color: blue;
+}

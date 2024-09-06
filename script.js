@@ -1,5 +1,8 @@
+let sandworm = []
+let direction = ''
+
 const main = document.querySelector('main')
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 15; i++) {
   let section = document.createElement('section')
   section.setAttribute('id', `${i}`)
   main.appendChild(section)
@@ -16,3 +19,28 @@ for (let i = 0; i < 10; i++) {
     }
   }
 }
+
+window.addEventListener('keydown', (arrow) => {
+  if (arrow.key === 'ArrowRight' && (direction === '' || direction != 'left')) {
+    direction = 'right'
+    console.log('right')
+  } else if (
+    arrow.key === 'ArrowLeft' &&
+    (direction === '' || direction != 'right')
+  ) {
+    direction = 'left'
+    console.log('left')
+  } else if (
+    arrow.key === 'ArrowUp' &&
+    (direction === '' || direction != 'down')
+  ) {
+    direction = 'up'
+    console.log('up')
+  } else if (
+    arrow.key === 'ArrowDown' &&
+    (direction === '' || direction != 'up')
+  ) {
+    direction = 'down'
+    console.log('down')
+  }
+})
