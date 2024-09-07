@@ -3,6 +3,7 @@ let direction = ''
 let startPosition = [7, 5]
 let counter = 1
 let sandwormLenght = 4
+let sandwormSpeed = 200
 let rightInterval
 let upInterval
 let leftInterval
@@ -86,6 +87,20 @@ const moveLeft = () => {
   }
 }
 
+const moveDown = () => {
+  sandworm.push([...startPosition])
+  const cell = document.querySelectorAll(`#c${startPosition[0]} div`)
+  cell[startPosition[1]].style.backgroundColor = 'yellow'
+  startPosition[1]++
+  if (counter >= sandwormLenght) {
+    sandwormEnds()
+  }
+  counter++
+  if (startPosition[0] - 1 === -2) {
+    clearInterval(downInterval)
+  }
+}
+
 window.addEventListener('keydown', (arrow) => {
   if (
     arrow.key === 'ArrowRight' &&
@@ -93,14 +108,16 @@ window.addEventListener('keydown', (arrow) => {
   ) {
     direction = 'right'
     clearInterval(upInterval)
-    rightInterval = setInterval(moveRight, 100)
+    clearInterval(downInterval)
+    rightInterval = setInterval(moveRight, sandwormSpeed)
   } else if (
     arrow.key === 'ArrowLeft' &&
     (direction === '' || (direction != 'left' && direction != 'right'))
   ) {
     direction = 'left'
     clearInterval(upInterval)
-    leftInterval = setInterval(moveLeft, 100)
+    clearInterval(downInterval)
+    leftInterval = setInterval(moveLeft, sandwormSpeed)
   } else if (
     arrow.key === 'ArrowUp' &&
     (direction === '' || (direction != 'up' && direction != 'down'))
@@ -108,12 +125,14 @@ window.addEventListener('keydown', (arrow) => {
     direction = 'up'
     clearInterval(rightInterval)
     clearInterval(leftInterval)
-    upInterval = setInterval(moveUp, 100)
+    upInterval = setInterval(moveUp, sandwormSpeed)
   } else if (
     arrow.key === 'ArrowDown' &&
     (direction === '' || (direction != 'down' && direction != 'up'))
   ) {
     direction = 'down'
-    console.log('down')
+    clearInterval(rightInterval)
+    clearInterval(leftInterval)
+    downInterval = setInterval(moveDown, sandwormSpeed)
   }
 })
