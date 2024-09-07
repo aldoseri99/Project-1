@@ -5,6 +5,8 @@ let counter = 1
 let sandwormLenght = 4
 let rightInterval
 let upInterval
+let leftInterval
+let downInterval
 
 const main = document.querySelector('main')
 for (let i = 0; i < 15; i++) {
@@ -67,12 +69,21 @@ const moveUp = () => {
   counter++
   if (startPosition[1] - 1 === -2) {
     clearInterval(upInterval)
-    // console.log('up edge')
   }
-  // for (let i = 0; i < sandworm.length; i++) {
-  //   console.log(sandworm[i])
-  // }
-  // console.log('-------------------------------')
+}
+
+const moveLeft = () => {
+  sandworm.push([...startPosition])
+  const cell = document.querySelectorAll(`#c${startPosition[0]} div`)
+  cell[startPosition[1]].style.backgroundColor = 'yellow'
+  startPosition[0]--
+  if (counter >= sandwormLenght) {
+    sandwormEnds()
+  }
+  counter++
+  if (startPosition[0] - 1 === -2) {
+    clearInterval(leftInterval)
+  }
 }
 
 window.addEventListener('keydown', (arrow) => {
@@ -88,13 +99,15 @@ window.addEventListener('keydown', (arrow) => {
     (direction === '' || (direction != 'left' && direction != 'right'))
   ) {
     direction = 'left'
-    console.log('left')
+    clearInterval(upInterval)
+    leftInterval = setInterval(moveLeft, 100)
   } else if (
     arrow.key === 'ArrowUp' &&
     (direction === '' || (direction != 'up' && direction != 'down'))
   ) {
     direction = 'up'
     clearInterval(rightInterval)
+    clearInterval(leftInterval)
     upInterval = setInterval(moveUp, 100)
   } else if (
     arrow.key === 'ArrowDown' &&
