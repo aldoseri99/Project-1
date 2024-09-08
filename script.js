@@ -1,16 +1,21 @@
 let sandworm = []
 let direction = ''
-let startPosition = [7, 5] //middle of the grid
 let counter = 1
 let sandwormLenght = 4
-let sandwormSpeed = 100
+let sandwormSpeed = 200
 let moving = true
 let apple = []
 let appleExist = false //  indicator to see if there is an apple in the grid
 let shift //the shifted value
 let head
 let score = 0
+let bestScore = 0
 let appleShape //apple icon
+
+let height = 10
+let width = 10
+
+let startPosition = [Math.floor(height / 2), Math.floor(width / 2)] //middle of the grid
 
 //intervals
 let rightInterval
@@ -21,13 +26,16 @@ let timeInterval
 
 const scoreLabel = document.createElement('h1')
 document.body.append(scoreLabel)
-scoreLabel.innerText = '00'
+scoreLabel.innerText = 'Score: 00'
+const restartBtn = document.createElement('button')
+document.body.append(restartBtn)
+restartBtn.innerText = 'Restart'
 const main = document.querySelector('main')
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < height; i++) {
   let section = document.createElement('section')
   section.setAttribute('id', `c${i}`)
   main.appendChild(section)
-  for (let j = 0; j < 11; j++) {
+  for (let j = 0; j < width; j++) {
     let div = document.createElement('div')
     section.appendChild(div)
     div.style.width = '50px'
@@ -41,8 +49,6 @@ for (let i = 0; i < 15; i++) {
     }
   }
 }
-
-// const columns = document.querySelectorAll('section')
 
 const sandwormMove = () => {
   sandworm.push([...startPosition]) //from geek
@@ -74,8 +80,8 @@ const sandwormEnds = () => {
 const addApple = () => {
   //syntax from MDN web
   do {
-    let c = Math.floor(Math.random() * 15)
-    let r = Math.floor(Math.random() * 11)
+    let c = Math.floor(Math.random() * height)
+    let r = Math.floor(Math.random() * width)
     apple = [c, r]
     appleExist = true
   } while (sandworm.find(isThere))
@@ -114,7 +120,7 @@ const appleEaten = () => {
   ) {
     appleShape.innerHTML = ''
     score += 10
-    scoreLabel.innerText = score
+    scoreLabel.innerText = `Score: ${score}`
     addApple()
   } else if (counter >= sandwormLenght) {
     sandwormEnds()
@@ -123,14 +129,14 @@ const appleEaten = () => {
 
 const timer = () => {
   score += 10
-  scoreLabel.innerText = score
+  scoreLabel.innerText = `Score: ${score}`
 }
 
 const moveRight = () => {
-  if (startPosition[0] + 1 < 15) {
+  if (startPosition[0] + 1 < height) {
     startPosition[0]++
-    checkEatSelf()
     sandwormMove()
+    checkEatSelf()
     if (appleExist === false) {
       addApple()
     }
@@ -144,8 +150,8 @@ const moveRight = () => {
 const moveUp = () => {
   if (startPosition[1] - 1 > -1) {
     startPosition[1]--
-    checkEatSelf()
     sandwormMove()
+    checkEatSelf()
     if (appleExist === false) {
       addApple()
     }
@@ -160,8 +166,8 @@ const moveUp = () => {
 const moveLeft = () => {
   if (startPosition[0] - 1 > -1) {
     startPosition[0]--
-    checkEatSelf()
     sandwormMove()
+    checkEatSelf()
     if (appleExist === false) {
       addApple()
     }
@@ -174,10 +180,10 @@ const moveLeft = () => {
 }
 
 const moveDown = () => {
-  if (startPosition[1] + 1 < 11) {
+  if (startPosition[1] + 1 < width) {
     startPosition[1]++
-    checkEatSelf()
     sandwormMove()
+    checkEatSelf()
     if (appleExist === false) {
       addApple()
     }
@@ -189,11 +195,40 @@ const moveDown = () => {
   }
 }
 
+const restart = () => {
+  console.log('restart')
+  scoreLabel.innerText = `Score: 00`
+  score = 0
+  moving = true
+  sandworm = []
+  direction = ''
+  startPosition = [Math.floor(height / 2), Math.floor(width / 2)]
+  counter = 1
+  appleExist = false
+
+  if (score > bestScore) {
+    bestScore = score
+  }
+
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      const cell = document.querySelector(`#c${i} :nth-child(${j + 1})`)
+      cell.innerHTML = ''
+      if ((j + i) % 2 === 0) {
+        cell.style.backgroundColor = '#ff3333'
+      } else {
+        cell.style.backgroundColor = '#ff9999'
+      }
+    }
+  }
+}
+
+restartBtn.addEventListener('click', restart)
+
 //source: geeksforgeeks
 let startTime = true
 let keyPress = 0
 let cooldown = 100
-
 window.addEventListener('keydown', (arrow) => {
   const currentTime = Date.now()
 
