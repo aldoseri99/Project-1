@@ -3,7 +3,7 @@ let direction = ''
 let startPosition = [7, 5] //middle of the grid
 let counter = 1
 let sandwormLenght = 4
-let sandwormSpeed = 150
+let sandwormSpeed = 100
 let rightInterval
 let upInterval
 let leftInterval
@@ -36,7 +36,6 @@ for (let i = 0; i < 15; i++) {
 // const columns = document.querySelectorAll('section')
 
 const sandwormMove = () => {
-  sandworm.push([...startPosition]) //from geek
   const cell = document.querySelectorAll(`#c${startPosition[0]} div`)
   cell[startPosition[1]].style.backgroundColor = 'yellow'
 }
@@ -59,23 +58,38 @@ const addApple = () => {
     let r = Math.floor(Math.random() * 11)
     apple = [c, r]
     appleExist = true
-    let appleShape = document.querySelector(
-      `#c${apple[0]} :nth-child(${apple[1] + 1})`
-    )
-    appleShape.style.backgroundColor = 'green'
-  } while (sandworm.includes(apple))
+  } while (sandworm.find(isThere))
+  let appleShape = document.querySelector(
+    `#c${apple[0]} :nth-child(${apple[1] + 1})`
+  )
+  appleShape.style.backgroundColor = 'green'
+}
+
+const isThere = (position) => {
+  //Source: MDN
+  if (position[0] === apple[0] && position[1] === apple[1]) {
+    return true
+  } else return false
 }
 
 const moveRight = () => {
   if (startPosition[0] + 1 < 15) {
     startPosition[0]++
+    sandworm.push([...startPosition]) //from geek
     sandwormMove()
     if (appleExist === false) {
       addApple()
     }
-    if (counter >= sandwormLenght) {
+    if (
+      sandworm[sandworm.length - 1][0] === apple[0] &&
+      sandworm[sandworm.length - 1][1] === apple[1]
+    ) {
+      console.log('collected')
+      addApple()
+    } else if (counter >= sandwormLenght) {
       sandwormEnds()
     }
+    console.log('-----------------')
     counter++
   } else {
     console.log('Game Over:  Right Edge')
@@ -85,11 +99,18 @@ const moveRight = () => {
 const moveUp = () => {
   if (startPosition[1] - 1 > -1) {
     startPosition[1]--
+    sandworm.push([...startPosition]) //from geek
     sandwormMove()
     if (appleExist === false) {
       addApple()
     }
-    if (counter >= sandwormLenght) {
+    if (
+      sandworm[sandworm.length - 1][0] === apple[0] &&
+      sandworm[sandworm.length - 1][1] === apple[1]
+    ) {
+      console.log('collected')
+      addApple()
+    } else if (counter >= sandwormLenght) {
       sandwormEnds()
     }
     counter++
@@ -102,11 +123,18 @@ const moveUp = () => {
 const moveLeft = () => {
   if (startPosition[0] - 1 > -1) {
     startPosition[0]--
+    sandworm.push([...startPosition]) //from geek
     sandwormMove()
     if (appleExist === false) {
       addApple()
     }
-    if (counter >= sandwormLenght) {
+    if (
+      sandworm[sandworm.length - 1][0] === apple[0] &&
+      sandworm[sandworm.length - 1][1] === apple[1]
+    ) {
+      console.log('collected')
+      addApple()
+    } else if (counter >= sandwormLenght) {
       sandwormEnds()
     }
     counter++
@@ -119,12 +147,19 @@ const moveLeft = () => {
 const moveDown = () => {
   if (startPosition[1] + 1 < 11) {
     startPosition[1]++
+    sandworm.push([...startPosition]) //from geek
     sandwormMove()
-    if (counter >= sandwormLenght) {
-      sandwormEnds()
-    }
     if (appleExist === false) {
       addApple()
+    }
+    if (
+      sandworm[sandworm.length - 1][0] === apple[0] &&
+      sandworm[sandworm.length - 1][1] === apple[1]
+    ) {
+      console.log('collected')
+      addApple()
+    } else if (counter >= sandwormLenght) {
+      sandwormEnds()
     }
     counter++
   } else {
