@@ -12,7 +12,11 @@ let moving = true
 let apple = []
 let appleExist = false //  indicator to see if there is an apple in the grid
 let shift //the shifted value
+let head
+let score = 0
 
+const scoreLabel = document.createElement('h1')
+document.body.append(scoreLabel)
 const main = document.querySelector('main')
 for (let i = 0; i < 15; i++) {
   let section = document.createElement('section')
@@ -36,7 +40,22 @@ for (let i = 0; i < 15; i++) {
 // const columns = document.querySelectorAll('section')
 
 const sandwormMove = () => {
+  sandworm.push([...startPosition]) //from geek
   const cell = document.querySelectorAll(`#c${startPosition[0]} div`)
+  // for (let i = 0; i < sandworm.length; i++) {
+
+  // const cell = document.querySelector(`#c${startPosition[0]} :nth-child(${startPosition[1]+1})`)
+  // if (
+  //   startPosition[0] === sandworm[sandworm.length - 1][0] &&
+  //   startPosition[1] === sandworm[sandworm.length - 1][1]
+  // ) {
+  //   console.log(
+  //     `${startPosition[0]} === ${sandworm[sandworm.length - 1][0]}
+  //       ${startPosition[1]} === ${sandworm[sandworm.length - 1][1]}`
+  //   )
+  //   cell[startPosition[1]].style.backgroundColor = 'blue'
+  // }
+  // }
   cell[startPosition[1]].style.backgroundColor = 'yellow'
 }
 
@@ -73,10 +92,11 @@ const isThere = (position) => {
 }
 
 const checkEatSelf = () => {
-  let head = sandworm[sandworm.length - 1]
-  console.log(head)
+  let mouth = sandworm[sandworm.length - 1]
+  console.log(mouth)
   for (let i = 0; i < sandworm.length - 1; i++) {
-    if (head[0] === sandworm[i][0] && head[1] === sandworm[i][1]) {
+    if (mouth[0] === sandworm[i][0] && mouth[1] === sandworm[i][1]) {
+      moving = false
       clearInterval(upInterval)
       clearInterval(downInterval)
       clearInterval(rightInterval)
@@ -89,9 +109,8 @@ const checkEatSelf = () => {
 const moveRight = () => {
   if (startPosition[0] + 1 < 15) {
     startPosition[0]++
-    sandworm.push([...startPosition]) //from geek
-    checkEatSelf()
     sandwormMove()
+    checkEatSelf()
     if (appleExist === false) {
       addApple()
     }
@@ -99,22 +118,21 @@ const moveRight = () => {
       sandworm[sandworm.length - 1][0] === apple[0] &&
       sandworm[sandworm.length - 1][1] === apple[1]
     ) {
-      console.log('collected')
+      score += 10
+      scoreLabel.innerText = score
       addApple()
     } else if (counter >= sandwormLenght) {
       sandwormEnds()
     }
-    console.log('-----------------')
     counter++
   } else {
-    console.log('Game Over:  Right Edge')
+    moving = false
     clearInterval(rightInterval)
   }
 }
 const moveUp = () => {
   if (startPosition[1] - 1 > -1) {
     startPosition[1]--
-    sandworm.push([...startPosition]) //from geek
     checkEatSelf()
     sandwormMove()
     if (appleExist === false) {
@@ -124,14 +142,15 @@ const moveUp = () => {
       sandworm[sandworm.length - 1][0] === apple[0] &&
       sandworm[sandworm.length - 1][1] === apple[1]
     ) {
-      console.log('collected')
+      score += 10
+      scoreLabel.innerText = score
       addApple()
     } else if (counter >= sandwormLenght) {
       sandwormEnds()
     }
     counter++
   } else {
-    console.log('Game Over:  Upper Edge')
+    moving = false
     clearInterval(upInterval)
   }
 }
@@ -139,7 +158,6 @@ const moveUp = () => {
 const moveLeft = () => {
   if (startPosition[0] - 1 > -1) {
     startPosition[0]--
-    sandworm.push([...startPosition]) //from geek
     checkEatSelf()
     sandwormMove()
     if (appleExist === false) {
@@ -149,14 +167,15 @@ const moveLeft = () => {
       sandworm[sandworm.length - 1][0] === apple[0] &&
       sandworm[sandworm.length - 1][1] === apple[1]
     ) {
-      console.log('collected')
+      score += 10
+      scoreLabel.innerText = score
       addApple()
     } else if (counter >= sandwormLenght) {
       sandwormEnds()
     }
     counter++
   } else {
-    console.log('Game Over:  Left Edge')
+    moving = false
     clearInterval(leftInterval)
   }
 }
@@ -164,7 +183,6 @@ const moveLeft = () => {
 const moveDown = () => {
   if (startPosition[1] + 1 < 11) {
     startPosition[1]++
-    sandworm.push([...startPosition]) //from geek
     checkEatSelf()
     sandwormMove()
     if (appleExist === false) {
@@ -174,21 +192,22 @@ const moveDown = () => {
       sandworm[sandworm.length - 1][0] === apple[0] &&
       sandworm[sandworm.length - 1][1] === apple[1]
     ) {
-      console.log('collected')
+      score += 10
+      scoreLabel.innerText = score
       addApple()
     } else if (counter >= sandwormLenght) {
       sandwormEnds()
     }
     counter++
   } else {
-    console.log('Game Over:  Bottom Edge')
+    moving = false
     clearInterval(downInterval)
   }
 }
 
-if (moving) {
-  //source: geeksforgeeks
-  window.addEventListener('keydown', (arrow) => {
+//source: geeksforgeeks
+window.addEventListener('keydown', (arrow) => {
+  if (moving) {
     if (
       arrow.key === 'ArrowRight' &&
       (direction === '' || (direction != 'right' && direction != 'left'))
@@ -222,5 +241,5 @@ if (moving) {
       clearInterval(leftInterval)
       downInterval = setInterval(moveDown, sandwormSpeed)
     }
-  })
-}
+  }
+})
