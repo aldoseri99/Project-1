@@ -72,10 +72,25 @@ const isThere = (position) => {
   } else return false
 }
 
+const checkEatSelf = () => {
+  let head = sandworm[sandworm.length - 1]
+  console.log(head)
+  for (let i = 0; i < sandworm.length - 1; i++) {
+    if (head[0] === sandworm[i][0] && head[1] === sandworm[i][1]) {
+      clearInterval(upInterval)
+      clearInterval(downInterval)
+      clearInterval(rightInterval)
+      clearInterval(leftInterval)
+      console.log('just eat it')
+    }
+  }
+}
+
 const moveRight = () => {
   if (startPosition[0] + 1 < 15) {
     startPosition[0]++
     sandworm.push([...startPosition]) //from geek
+    checkEatSelf()
     sandwormMove()
     if (appleExist === false) {
       addApple()
@@ -100,6 +115,7 @@ const moveUp = () => {
   if (startPosition[1] - 1 > -1) {
     startPosition[1]--
     sandworm.push([...startPosition]) //from geek
+    checkEatSelf()
     sandwormMove()
     if (appleExist === false) {
       addApple()
@@ -124,6 +140,7 @@ const moveLeft = () => {
   if (startPosition[0] - 1 > -1) {
     startPosition[0]--
     sandworm.push([...startPosition]) //from geek
+    checkEatSelf()
     sandwormMove()
     if (appleExist === false) {
       addApple()
@@ -148,6 +165,7 @@ const moveDown = () => {
   if (startPosition[1] + 1 < 11) {
     startPosition[1]++
     sandworm.push([...startPosition]) //from geek
+    checkEatSelf()
     sandwormMove()
     if (appleExist === false) {
       addApple()
