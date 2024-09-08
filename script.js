@@ -1,13 +1,17 @@
 let sandworm = []
 let direction = ''
-let startPosition = [7, 5]
+let startPosition = [7, 5] //middle of the grid
 let counter = 1
 let sandwormLenght = 4
-let sandwormSpeed = 200
+let sandwormSpeed = 150
 let rightInterval
 let upInterval
 let leftInterval
 let downInterval
+let moving = true
+let apple = []
+let appleExist = false //  indicator to see if there is an apple in the grid
+let shift //the shifted value
 
 const main = document.querySelector('main')
 for (let i = 0; i < 15; i++) {
@@ -29,110 +33,141 @@ for (let i = 0; i < 15; i++) {
   }
 }
 
-const columns = document.querySelectorAll('section')
+// const columns = document.querySelectorAll('section')
+
+const sandwormMove = () => {
+  sandworm.push([...startPosition]) //from geek
+  const cell = document.querySelectorAll(`#c${startPosition[0]} div`)
+  cell[startPosition[1]].style.backgroundColor = 'yellow'
+}
 
 const sandwormEnds = () => {
-  let shift = sandworm.shift()
+  shift = sandworm.shift()
   const cellShift = document.querySelectorAll(`#c${shift[0]} div`)
   if ((shift[1] + shift[0]) % 2 === 0) {
+    //CSS return to grid color
     cellShift[shift[1]].style.backgroundColor = '#ff3333'
   } else {
     cellShift[shift[1]].style.backgroundColor = '#ff9999'
   }
 }
 
+const addApple = () => {
+  //syntax from MDN web
+  do {
+    let c = Math.floor(Math.random() * 15)
+    let r = Math.floor(Math.random() * 11)
+    apple = [c, r]
+    appleExist = true
+    let appleShape = document.querySelector(
+      `#c${apple[0]} :nth-child(${apple[1] + 1})`
+    )
+    appleShape.style.backgroundColor = 'green'
+  } while (sandworm.includes(apple))
+}
+
 const moveRight = () => {
-  sandworm.push([...startPosition])
-  const cell = document.querySelectorAll(`#c${startPosition[0]} div`)
-  cell[startPosition[1]].style.backgroundColor = 'yellow'
-  startPosition[0]++
-  if (counter >= sandwormLenght) {
-    sandwormEnds()
-  }
-  counter++
-  if (startPosition[0] + 1 === 16) {
+  if (startPosition[0] + 1 < 15) {
+    startPosition[0]++
+    sandwormMove()
+    if (appleExist === false) {
+      addApple()
+    }
+    if (counter >= sandwormLenght) {
+      sandwormEnds()
+    }
+    counter++
+  } else {
+    console.log('Game Over:  Right Edge')
     clearInterval(rightInterval)
-    // console.log('right edge')
   }
-  // for (let i = 0; i < sandworm.length; i++) {
-  //   console.log(sandworm[i])
-  // }
-  // console.log('-------------------------------')
 }
 const moveUp = () => {
-  sandworm.push([...startPosition])
-  const cell = document.querySelectorAll(`#c${startPosition[0]} div`)
-  cell[startPosition[1]].style.backgroundColor = 'yellow'
-  startPosition[1]--
-  if (counter >= sandwormLenght) {
-    sandwormEnds()
-  }
-  counter++
-  if (startPosition[1] - 1 === -2) {
+  if (startPosition[1] - 1 > -1) {
+    startPosition[1]--
+    sandwormMove()
+    if (appleExist === false) {
+      addApple()
+    }
+    if (counter >= sandwormLenght) {
+      sandwormEnds()
+    }
+    counter++
+  } else {
+    console.log('Game Over:  Upper Edge')
     clearInterval(upInterval)
   }
 }
 
 const moveLeft = () => {
-  sandworm.push([...startPosition])
-  const cell = document.querySelectorAll(`#c${startPosition[0]} div`)
-  cell[startPosition[1]].style.backgroundColor = 'yellow'
-  startPosition[0]--
-  if (counter >= sandwormLenght) {
-    sandwormEnds()
-  }
-  counter++
-  if (startPosition[0] - 1 === -2) {
+  if (startPosition[0] - 1 > -1) {
+    startPosition[0]--
+    sandwormMove()
+    if (appleExist === false) {
+      addApple()
+    }
+    if (counter >= sandwormLenght) {
+      sandwormEnds()
+    }
+    counter++
+  } else {
+    console.log('Game Over:  Left Edge')
     clearInterval(leftInterval)
   }
 }
 
 const moveDown = () => {
-  sandworm.push([...startPosition])
-  const cell = document.querySelectorAll(`#c${startPosition[0]} div`)
-  cell[startPosition[1]].style.backgroundColor = 'yellow'
-  startPosition[1]++
-  if (counter >= sandwormLenght) {
-    sandwormEnds()
-  }
-  counter++
-  if (startPosition[0] - 1 === -2) {
+  if (startPosition[1] + 1 < 11) {
+    startPosition[1]++
+    sandwormMove()
+    if (counter >= sandwormLenght) {
+      sandwormEnds()
+    }
+    if (appleExist === false) {
+      addApple()
+    }
+    counter++
+  } else {
+    console.log('Game Over:  Bottom Edge')
     clearInterval(downInterval)
   }
 }
 
-window.addEventListener('keydown', (arrow) => {
-  if (
-    arrow.key === 'ArrowRight' &&
-    (direction === '' || (direction != 'right' && direction != 'left'))
-  ) {
-    direction = 'right'
-    clearInterval(upInterval)
-    clearInterval(downInterval)
-    rightInterval = setInterval(moveRight, sandwormSpeed)
-  } else if (
-    arrow.key === 'ArrowLeft' &&
-    (direction === '' || (direction != 'left' && direction != 'right'))
-  ) {
-    direction = 'left'
-    clearInterval(upInterval)
-    clearInterval(downInterval)
-    leftInterval = setInterval(moveLeft, sandwormSpeed)
-  } else if (
-    arrow.key === 'ArrowUp' &&
-    (direction === '' || (direction != 'up' && direction != 'down'))
-  ) {
-    direction = 'up'
-    clearInterval(rightInterval)
-    clearInterval(leftInterval)
-    upInterval = setInterval(moveUp, sandwormSpeed)
-  } else if (
-    arrow.key === 'ArrowDown' &&
-    (direction === '' || (direction != 'down' && direction != 'up'))
-  ) {
-    direction = 'down'
-    clearInterval(rightInterval)
-    clearInterval(leftInterval)
-    downInterval = setInterval(moveDown, sandwormSpeed)
-  }
-})
+if (moving) {
+  //source: geeksforgeeks
+  window.addEventListener('keydown', (arrow) => {
+    if (
+      arrow.key === 'ArrowRight' &&
+      (direction === '' || (direction != 'right' && direction != 'left'))
+    ) {
+      direction = 'right'
+      clearInterval(upInterval)
+      clearInterval(downInterval)
+      rightInterval = setInterval(moveRight, sandwormSpeed)
+    } else if (
+      arrow.key === 'ArrowLeft' &&
+      (direction === '' || (direction != 'left' && direction != 'right'))
+    ) {
+      direction = 'left'
+      clearInterval(upInterval)
+      clearInterval(downInterval)
+      leftInterval = setInterval(moveLeft, sandwormSpeed)
+    } else if (
+      arrow.key === 'ArrowUp' &&
+      (direction === '' || (direction != 'up' && direction != 'down'))
+    ) {
+      direction = 'up'
+      clearInterval(rightInterval)
+      clearInterval(leftInterval)
+      upInterval = setInterval(moveUp, sandwormSpeed)
+    } else if (
+      arrow.key === 'ArrowDown' &&
+      (direction === '' || (direction != 'down' && direction != 'up'))
+    ) {
+      direction = 'down'
+      clearInterval(rightInterval)
+      clearInterval(leftInterval)
+      downInterval = setInterval(moveDown, sandwormSpeed)
+    }
+  })
+}
