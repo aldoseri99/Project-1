@@ -14,3 +14,12 @@ main {
 .sandworm {
   background-color: blue;
 }
+.fa-apple-whole {
+  font-size: 45px;
+  color: yellow;
+}
+div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
