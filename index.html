@@ -15,27 +15,34 @@
       crossorigin="anonymous"
     ></script>
     <script defer src="script.js"></script>
-    <title>Sandworm</title>
+    <title>Shai-Hulud</title>
   </head>
   <body>
-    <h1 class="score-label"></h1>
-    <main>
-      <div class="level">
-        Choose level
-        <div>
-          <button class="snake">Sanke</button>
-          <button class="sandworm">Sandworm</button>
-          <button class="python">Python</button>
+    <div class="title">
+      <h1>Shai-Hulud</h1>
+    </div>
+    <div class="game-part">
+      <div class="left-side">
+        <h1 class="score-label"></h1>
+      </div>
+      <main>
+        <div class="level">
+          Choose level
+          <div>
+            <button class="snake">Desert Wanderer</button>
+            <button class="sandworm">Spice Hunter</button>
+            <button class="python">Lisan al-Gaib</button>
+          </div>
         </div>
+        <div class="game-over">
+          Game Over!
+          <button class="restart-btn">Restart</button>
+        </div>
+        <div class="board"></div>
+      </main>
+      <div class="right-side">
+        <h1 class="best-score-label"></h1>
       </div>
-      <div class="game-over">
-        Game Over!
-        <button class="restart-btn">Restart</button>
-      </div>
-      <div class="board"></div>
-    </main>
-    <div class="left-side">
-      <h1 class="best-score-label"></h1>
     </div>
   </body>
 </html>

@@ -2,11 +2,19 @@ body {
   margin: 0;
   height: 100vh;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   font-family: 'Play', sans-serif;
 }
+
+.game-part {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  background-image: url(images/download.jpeg);
+  background-size: cover;
+  height: 100vh;
+}
+
 main {
   display: flex;
   flex-direction: row;
@@ -14,20 +22,23 @@ main {
   width: 630px;
   height: 480px;
   box-shadow: 8px 16px 16px hsl(0deg 0% 0% / 0.25);
+  /* background-image: url(https://t4.ftcdn.net/jpg/06/77/33/63/360_F_677336383_CT107OBD3o18HfON2i0YAdVVb29XiDdx.jpg);
+  background-size: cover; */
+}
+
+.title {
+  color: #daa520;
+  background-color: #2f2f2f;
 }
 
 .fa-apple-whole {
-  font-size: 26px;
-  color: yellow;
+  font-size: 34px;
+  color: white;
 }
 div {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.left-side {
-  display: flex;
-  flex-direction: column;
 }
 
 .game-over {
@@ -35,22 +46,22 @@ div {
   display: none;
   flex-direction: column;
   align-self: center;
-  z-index: 1000px;
   position: absolute;
   width: 630px;
   height: 480px;
-  background-color: #ff000044;
+  background-color: #31313199;
+  color: white;
 }
 .level {
   font-size: 100px;
   display: flex;
   flex-direction: column;
   align-self: center;
-  z-index: 1000px;
   position: absolute;
   width: 630px;
   height: 480px;
-  background-color: #0000ff44;
+  background-color: #291f14;
+  color: #ffe3a5;
 }
 .level div {
   display: flex;
@@ -58,6 +69,7 @@ div {
   justify-content: space-around;
 }
 .level div button {
+  color: #ffe3a5;
   font-size: 25px;
   padding: 10px 5px;
   border: none;
@@ -65,10 +77,24 @@ div {
   border: 1px solid rgba(0, 0, 0, 0);
 }
 .level div button:hover {
-  border: 1px solid black;
+  border: 1px solid #ffe3a5;
   border-radius: 10px;
 }
 .restart-btn {
   font-size: 30px;
   border-radius: 10px;
+}
+
+.right-side,
+.left-side {
+  width: 20%;
+  color: #deb887;
+  background-color: #313131;
+  box-shadow: 8px 16px 16px hsl(0deg 0% 0% / 0.25);
+  text-align: center;
+  font-size: medium;
+}
+
+button {
+  font-family: 'Play', sans-serif;
 }

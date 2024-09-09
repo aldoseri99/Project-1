@@ -29,7 +29,8 @@ let downInterval
 let timeInterval
 
 let sandwormSpeed = 200
-let boardColor = '#DDDDDD'
+let boardColor = '#3A2C1D'
+let boardColor2 = '#4E3B2D'
 
 const snakeBtn = document.querySelector('.snake')
 const sandwormBtn = document.querySelector('.sandworm')
@@ -37,10 +38,6 @@ const pythonBtn = document.querySelector('.python')
 const levelselector = document.querySelector('.level')
 
 const main = document.querySelector('main')
-main.style.width = '630px'
-main.style.height = '480px'
-main.style.border = '1px solid black'
-main.style.boxShadow = '8.0px 16.0px 16.0px hsl(0deg 0% 0% / 0.25)'
 
 const gridColor = () => {
   moving = true
@@ -49,30 +46,31 @@ const gridColor = () => {
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < height; j++) {
       const cell = document.querySelector(`#c${i} :nth-child(${j + 1})`)
-      cell.style.backgroundColor = `${boardColor}`
+      if ((j + i) % 2 === 0) {
+        cell.style.backgroundColor = `${boardColor}`
+      } else {
+        cell.style.backgroundColor = `${boardColor2}`
+      }
     }
   }
 }
 
 const snakeLevel = () => {
   sandwormSpeed = 250
-  boardColor = '#4BA803'
-  level = 'snake'
-  bestScoreLabel.innerText = `Snake: ${snakeBest}`
+  level = 'Desert Wanderer'
+  bestScoreLabel.innerText = `Desert Wanderer: ${snakeBest}`
   gridColor()
 }
 const sandwormLevel = () => {
   sandwormSpeed = 175
-  boardColor = '#DDDDDD'
-  level = 'sandworm'
-  bestScoreLabel.innerText = `Sandworm: ${sandwormBest}`
+  level = 'Spice Hunter'
+  bestScoreLabel.innerText = `Spice Hunter: ${sandwormBest}`
   gridColor()
 }
 const pythonLevel = () => {
   sandwormSpeed = 100
-  boardColor = '#74832A'
-  level = 'python'
-  bestScoreLabel.innerText = `Pyhton: ${pythonBest}`
+  level = 'Lisan al-Gaib'
+  bestScoreLabel.innerText = `Lisan al-Gaib: ${pythonBest}`
   gridColor()
 }
 snakeBtn.addEventListener('click', snakeLevel)
@@ -105,20 +103,25 @@ const sandwormMove = () => {
   const cell = document.querySelector(
     `#c${startPosition[0]} div:nth-child(${startPosition[1] + 1})`
   )
-  cell.style.backgroundColor = '#111111'
+  cell.style.backgroundColor = '#A65C3A '
   cell.style.borderRadius = '10px'
   for (let i = 0; i < sandworm.length - 1; i++) {
     const cell = document.querySelector(
       `#c${sandworm[i][0]} div:nth-child(${sandworm[i][1] + 1})`
     )
-    cell.style.backgroundColor = '#FF6347'
+    cell.style.backgroundColor = '#D4B49D '
   }
 }
 
 const sandwormEnds = () => {
   shift = sandworm.shift()
   const cellShift = document.querySelectorAll(`#c${shift[0]} div`)
-  cellShift[shift[1]].style.backgroundColor = `${boardColor}`
+  cellShift[shift[1]].style.borderRadius = '0px'
+  if ((shift[0] + shift[1]) % 2 === 0) {
+    cellShift[shift[1]].style.backgroundColor = `${boardColor}`
+  } else {
+    cellShift[shift[1]].style.backgroundColor = `${boardColor2}`
+  }
 }
 
 const addApple = () => {
@@ -165,22 +168,17 @@ const appleEaten = () => {
     appleShape.innerHTML = ''
     score += 10
     scoreLabel.innerText = `Score: ${score}`
-    if (level === 'snake' && score > snakeBest) {
-      bestScoreLabel.innerText = `Snake: ${score}`
-    } else if (level === 'sandworm' && score > sandwormBest) {
-      bestScoreLabel.innerText = `Sandworm: ${score}`
-    } else if (level === 'python' && score > pythonBest) {
-      bestScoreLabel.innerText = `Python: ${score}`
+    if (level === 'Desert Wanderer' && score > snakeBest) {
+      bestScoreLabel.innerText = `Desert Wanderer: ${score}`
+    } else if (level === 'Spice Hunter' && score > sandwormBest) {
+      bestScoreLabel.innerText = `Spice Hunter: ${score}`
+    } else if (level === 'Lisan al-Gaib' && score > pythonBest) {
+      bestScoreLabel.innerText = `Lisan al-Gaib: ${score}`
     }
     addApple()
   } else if (counter >= sandwormLenght) {
     sandwormEnds()
   }
-}
-
-const timer = () => {
-  score += 10
-  scoreLabel.innerText = `Score: ${score}`
 }
 
 const moveRight = () => {
@@ -250,32 +248,35 @@ const moveDown = () => {
   }
 }
 
+//reset values and change the best score if needed
 const restart = () => {
   console.log('restart')
   scoreLabel.innerText = `Score: 00`
-  moving = true
+  moving = false
   sandworm = []
   direction = ''
   startPosition = [Math.floor(width / 2), Math.floor(height / 2)]
   counter = 1
   appleExist = false
+  levelselector.style.display = 'flex'
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < height; j++) {
       const cell = document.querySelector(`#c${i} :nth-child(${j + 1})`)
       cell.innerHTML = ''
+      cell.style.borderRadius = '0px'
+      cell.style.backgroundColor = ''
     }
   }
-  levelselector.style.display = 'flex'
 
-  if (level === 'snake' && score > snakeBest) {
+  if (level === 'Desert Wanderer' && score > snakeBest) {
     snakeBest = score
-    bestScoreLabel.innerText = `Snake: ${score}`
-  } else if (level === 'sandworm' && score > sandwormBest) {
+    bestScoreLabel.innerText = `Desert Wanderer: ${score}`
+  } else if (level === 'Spice Hunter' && score > sandwormBest) {
     sandwormBest = score
-    bestScoreLabel.innerText = `Sandworm: ${score}`
-  } else if (level === 'python' && score > pythonBest) {
+    bestScoreLabel.innerText = `Spice Hunter: ${score}`
+  } else if (level === 'Lisan al-Gaib' && score > pythonBest) {
     pythonBest = score
-    bestScoreLabel.innerText = `Python: ${score}`
+    bestScoreLabel.innerText = `Lisan al-Gaib: ${score}`
   }
   score = 0
   gameOverLabel.style.display = 'none'
