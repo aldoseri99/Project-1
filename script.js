@@ -2,7 +2,6 @@ let sandworm = []
 let direction = ''
 let counter = 1
 let sandwormLenght = 4
-let sandwormSpeed = 200
 let moving = true
 let apple = []
 let appleExist = false //  indicator to see if there is an apple in the grid
@@ -12,11 +11,13 @@ let score = 0
 let bestScore = 0
 let appleShape //apple icon
 
+let snakeBest = 0
+let sandwormBest = 0
+let pythonBest = 0
+let level = ''
+
 let width = 21
 let height = 16
-
-let gridColor1 = '#DDDDDD'
-let gridColor2 = '#DDDDDD'
 
 let startPosition = [Math.floor(width / 2), Math.floor(height / 2)] //middle of the grid
 
@@ -27,12 +28,55 @@ let leftInterval
 let downInterval
 let timeInterval
 
+let sandwormSpeed = 200
+let boardColor = '#DDDDDD'
+
+const snakeBtn = document.querySelector('.snake')
+const sandwormBtn = document.querySelector('.sandworm')
+const pythonBtn = document.querySelector('.python')
+const levelselector = document.querySelector('.level')
+
+const main = document.querySelector('main')
+main.style.width = '630px'
+main.style.height = '480px'
+main.style.border = '1px solid black'
+main.style.boxShadow = '8.0px 16.0px 16.0px hsl(0deg 0% 0% / 0.25)'
+
+const gridColor = () => {
+  main.style.backgroundColor = boardColor
+  levelselector.style.display = 'none'
+  for (let i = 0; i < width; i++) {
+    for (let j = 0; j < height; j++) {
+      const cell = document.querySelector(`#c${i} :nth-child(${j + 1})`)
+      cell.style.backgroundColor = `${boardColor}`
+    }
+  }
+}
+
+const snakeLevel = () => {
+  sandwormSpeed = 250
+  boardColor = '#4BA803'
+  gridColor()
+}
+const sandwormLevel = () => {
+  sandwormSpeed = 175
+  boardColor = '#DDDDDD'
+  gridColor()
+}
+const pythonLevel = () => {
+  sandwormSpeed = 100
+  boardColor = '#74832A'
+  gridColor()
+}
+snakeBtn.addEventListener('click', snakeLevel)
+sandwormBtn.addEventListener('click', sandwormLevel)
+pythonBtn.addEventListener('click', pythonLevel)
+
 const scoreLabel = document.querySelector('.score-label')
 scoreLabel.innerText = 'Score: 00'
 const bestScoreLabel = document.querySelector('.best-score-label')
 bestScoreLabel.innerText = 'Best score: 00'
 const restartBtn = document.querySelector('.restart-btn')
-const main = document.querySelector('main')
 for (let i = 0; i < width; i++) {
   let section = document.createElement('section')
   section.setAttribute('id', `c${i}`)
@@ -44,11 +88,7 @@ for (let i = 0; i < width; i++) {
     div.style.height = '30px'
     // div.style.border = '1px dash #BDAE8F'
     // div.innerText = `${i},${j}`
-    if ((j + i) % 2 === 0) {
-      div.style.backgroundColor = `${gridColor1}`
-    } else {
-      div.style.backgroundColor = `${gridColor2}`
-    }
+    div.style.backgroundColor = `${boardColor}`
   }
 }
 const gameOverLabel = document.querySelector('.game-over')
@@ -59,6 +99,7 @@ const sandwormMove = () => {
     `#c${startPosition[0]} div:nth-child(${startPosition[1] + 1})`
   )
   cell.style.backgroundColor = '#111111'
+  cell.style.borderRadius = '10px'
   for (let i = 0; i < sandworm.length - 1; i++) {
     const cell = document.querySelector(
       `#c${sandworm[i][0]} div:nth-child(${sandworm[i][1] + 1})`
@@ -70,14 +111,7 @@ const sandwormMove = () => {
 const sandwormEnds = () => {
   shift = sandworm.shift()
   const cellShift = document.querySelectorAll(`#c${shift[0]} div`)
-  if ((shift[1] + shift[0]) % 2 === 0) {
-    //CSS return to grid color
-    cellShift[shift[1]].style.backgroundColor = `${gridColor1}`
-    cell.style.boxShadow = 'none'
-  } else {
-    cellShift[shift[1]].style.backgroundColor = `${gridColor2}`
-    cell.style.boxShadow = 'none'
-  }
+  cellShift[shift[1]].style.backgroundColor = `${boardColor}`
 }
 
 const addApple = () => {
@@ -215,6 +249,13 @@ const restart = () => {
   startPosition = [Math.floor(width / 2), Math.floor(height / 2)]
   counter = 1
   appleExist = false
+  for (let i = 0; i < width; i++) {
+    for (let j = 0; j < height; j++) {
+      const cell = document.querySelector(`#c${i} :nth-child(${j + 1})`)
+      cell.innerHTML = ''
+    }
+  }
+  levelselector.style.display = 'flex'
 
   if (score > bestScore) {
     bestScore = score
@@ -222,18 +263,6 @@ const restart = () => {
   }
   score = 0
   gameOverLabel.style.display = 'none'
-
-  for (let i = 0; i < width; i++) {
-    for (let j = 0; j < height; j++) {
-      const cell = document.querySelector(`#c${i} :nth-child(${j + 1})`)
-      cell.innerHTML = ''
-      if ((j + i) % 2 === 0) {
-        cell.style.backgroundColor = `${gridColor1}`
-      } else {
-        cell.style.backgroundColor = `${gridColor2}`
-      }
-    }
-  }
 }
 
 restartBtn.addEventListener('click', restart)
@@ -241,7 +270,7 @@ restartBtn.addEventListener('click', restart)
 //source: geeksforgeeks
 let startTime = true
 let keyPress = 0
-let cooldown = 100
+let cooldown = sandwormSpeed
 window.addEventListener('keydown', (arrow) => {
   const currentTime = Date.now()
 
