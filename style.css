@@ -5,6 +5,7 @@ body {
   justify-content: space-around;
   align-items: center;
   flex-direction: row;
+  font-family: 'Play', sans-serif;
 }
 main {
   display: flex;
@@ -61,6 +62,11 @@ div {
   padding: 10px 5px;
   border: none;
   background-color: #ffffff00;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+.level div button:hover {
+  border: 1px solid black;
+  border-radius: 10px;
 }
 .restart-btn {
   font-size: 30px;

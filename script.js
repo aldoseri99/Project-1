@@ -2,7 +2,7 @@ let sandworm = []
 let direction = ''
 let counter = 1
 let sandwormLenght = 4
-let moving = true
+let moving = false
 let apple = []
 let appleExist = false //  indicator to see if there is an apple in the grid
 let shift //the shifted value
@@ -43,6 +43,7 @@ main.style.border = '1px solid black'
 main.style.boxShadow = '8.0px 16.0px 16.0px hsl(0deg 0% 0% / 0.25)'
 
 const gridColor = () => {
+  moving = true
   main.style.backgroundColor = boardColor
   levelselector.style.display = 'none'
   for (let i = 0; i < width; i++) {
@@ -56,16 +57,22 @@ const gridColor = () => {
 const snakeLevel = () => {
   sandwormSpeed = 250
   boardColor = '#4BA803'
+  level = 'snake'
+  bestScoreLabel.innerText = `Snake: ${snakeBest}`
   gridColor()
 }
 const sandwormLevel = () => {
   sandwormSpeed = 175
   boardColor = '#DDDDDD'
+  level = 'sandworm'
+  bestScoreLabel.innerText = `Sandworm: ${sandwormBest}`
   gridColor()
 }
 const pythonLevel = () => {
   sandwormSpeed = 100
   boardColor = '#74832A'
+  level = 'python'
+  bestScoreLabel.innerText = `Pyhton: ${pythonBest}`
   gridColor()
 }
 snakeBtn.addEventListener('click', snakeLevel)
@@ -75,7 +82,7 @@ pythonBtn.addEventListener('click', pythonLevel)
 const scoreLabel = document.querySelector('.score-label')
 scoreLabel.innerText = 'Score: 00'
 const bestScoreLabel = document.querySelector('.best-score-label')
-bestScoreLabel.innerText = 'Best score: 00'
+bestScoreLabel.innerText = `Best score: 0`
 const restartBtn = document.querySelector('.restart-btn')
 for (let i = 0; i < width; i++) {
   let section = document.createElement('section')
@@ -139,12 +146,12 @@ const checkEatSelf = () => {
   let mouth = sandworm[sandworm.length - 1]
   for (let i = 0; i < sandworm.length - 1; i++) {
     if (mouth[0] === sandworm[i][0] && mouth[1] === sandworm[i][1]) {
+      gameOverLabel.style.display = 'flex'
       moving = false
       clearInterval(upInterval)
       clearInterval(downInterval)
       clearInterval(rightInterval)
       clearInterval(leftInterval)
-      console.log('just eat it')
       break
     }
   }
@@ -158,9 +165,12 @@ const appleEaten = () => {
     appleShape.innerHTML = ''
     score += 10
     scoreLabel.innerText = `Score: ${score}`
-    if (score > bestScore) {
-      console.log(bestScore, score)
-      bestScoreLabel.innerText = `Best score: ${score}`
+    if (level === 'snake' && score > snakeBest) {
+      bestScoreLabel.innerText = `Snake: ${score}`
+    } else if (level === 'sandworm' && score > sandwormBest) {
+      bestScoreLabel.innerText = `Sandworm: ${score}`
+    } else if (level === 'python' && score > pythonBest) {
+      bestScoreLabel.innerText = `Python: ${score}`
     }
     addApple()
   } else if (counter >= sandwormLenght) {
@@ -257,9 +267,15 @@ const restart = () => {
   }
   levelselector.style.display = 'flex'
 
-  if (score > bestScore) {
-    bestScore = score
-    bestScoreLabel.innerText = `Best score: ${score}`
+  if (level === 'snake' && score > snakeBest) {
+    snakeBest = score
+    bestScoreLabel.innerText = `Snake: ${score}`
+  } else if (level === 'sandworm' && score > sandwormBest) {
+    sandwormBest = score
+    bestScoreLabel.innerText = `Sandworm: ${score}`
+  } else if (level === 'python' && score > pythonBest) {
+    pythonBest = score
+    bestScoreLabel.innerText = `Python: ${score}`
   }
   score = 0
   gameOverLabel.style.display = 'none'
@@ -268,19 +284,11 @@ const restart = () => {
 restartBtn.addEventListener('click', restart)
 
 //source: geeksforgeeks
-let startTime = true
-let keyPress = 0
-let cooldown = sandwormSpeed
 window.addEventListener('keydown', (arrow) => {
-  const currentTime = Date.now()
-
-  if (currentTime - keyPress < cooldown) {
-    return
-  }
-  lastKeyPressTime = currentTime
+  console.log(arrow.key)
   if (moving) {
     if (
-      arrow.key === 'ArrowRight' &&
+      (arrow.key === 'ArrowRight' || arrow.key === 'd') &&
       direction != 'right' &&
       direction != 'left'
     ) {
@@ -289,7 +297,7 @@ window.addEventListener('keydown', (arrow) => {
       clearInterval(downInterval)
       rightInterval = setInterval(moveRight, sandwormSpeed)
     } else if (
-      arrow.key === 'ArrowLeft' &&
+      (arrow.key === 'ArrowLeft' || arrow.key === 'a') &&
       direction != 'left' &&
       direction != 'right'
     ) {
@@ -298,7 +306,7 @@ window.addEventListener('keydown', (arrow) => {
       clearInterval(downInterval)
       leftInterval = setInterval(moveLeft, sandwormSpeed)
     } else if (
-      arrow.key === 'ArrowUp' &&
+      (arrow.key === 'ArrowUp' || arrow.key === 'w') &&
       direction != 'up' &&
       direction != 'down'
     ) {
@@ -307,7 +315,7 @@ window.addEventListener('keydown', (arrow) => {
       clearInterval(leftInterval)
       upInterval = setInterval(moveUp, sandwormSpeed)
     } else if (
-      arrow.key === 'ArrowDown' &&
+      (arrow.key === 'ArrowDown' || arrow.key === 's') &&
       direction != 'down' &&
       direction != 'up'
     ) {
