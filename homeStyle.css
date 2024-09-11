@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  background-image: url(images/home.jpg);
+  background-size: cover;
+  font-family: 'Dune Rise', sans-serif;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 30px;
+}
+
+.header h1 {
+  font-size: 90px;
+}
+
+.hidden {
+  height: 200px;
+  width: 100%;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+}
+.hidden:hover {
+  color: black;
+  opacity: 1;
+  background-color: #ffffff44;
+}
+
+button {
+  background: linear-gradient(135deg, yellow, orange);
+  border: none;
+  color: black;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Dune Rise', sans-serif;
+}
+
+button:hover {
+  background: linear-gradient(135deg, orange, yellow);
+  transform: translateY(-2px);
+}
+.keyboardSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 30px;
+}
+.keyboard {
+  width: 267px;
+  height: 200px;
+}

@@ -3,54 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <script
-      src="https://kit.fontawesome.com/07d6ecaddb.js"
-      crossorigin="anonymous"
-    ></script>
-    <script defer src="script.js"></script>
-    <title>Sandworm</title>
+    <link href="https://fonts.cdnfonts.com/css/dune-rise" rel="stylesheet" />
+    <link rel="stylesheet" href="homeStyle.css" />
+    <link rel="icon" type="image/x-icon" href="/images/logo-dark.png" />
+    <script defer src="index.js"></script>
+    <title>Home</title>
   </head>
   <body>
-    <div class="title">
+    <div class="header">
       <h1>Sandworm</h1>
-    </div>
-    <div class="game-part">
-      <div class="left-side">
-        <h1 class="score-label"></h1>
+      To Move the snadworm you can use
+      <div class="keyboardSection">
+        <img src="images/mod-wasd.png" class="keyboard" alt="" />
+        or
+        <img src="images/mod-arrows.png" class="keyboard" alt="" />
       </div>
-      <main>
-        <div class="level">
-          <h1>Choose level</h1>
-          <div>
-            <button class="snake">Snake</button>
-            <button class="sandworm">Sandworm</button>
-            <button class="python">Python</button>
-            <button class="cowboy">Cowboy</button>
-          </div>
-        </div>
-        <div class="game-over">
-          <h1>Game Over!</h1>
-          <button class="restart-btn">Restart</button>
-        </div>
-        <div class="board"></div>
-      </main>
-      <div class="right-side">
-        <h1 class="best-score-label"></h1>
-        <h1 class="time-label">Time: 00:00</h1>
-      </div>
+      <button>Start</button>
     </div>
-    <audio class="soundtrack" controls>
-      <source src="sfx/rdr2-theme.mp3" type="audio/mpeg" />
-    </audio>
-    <audio class="busted" controls>
-      <source src="sfx/busted.mp3" type="audio/mpeg" />
-    </audio>
+    <div class="hidden">
+      Unlock Hidden level: score more than 100 in Python level
+    </div>
   </body>
 </html>

@@ -3,14 +3,14 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: 'Play', sans-serif;
+  font-family: 'Dune Rise', sans-serif;
 }
 
 .game-part {
   display: flex;
   justify-content: space-around;
   flex-direction: row;
-  background-image: url(images/download.jpeg);
+  background-image: url(images/home.jpg);
   background-size: cover;
   height: 100vh;
 }
@@ -31,17 +31,17 @@ main {
   background-color: #2f2f2f;
 }
 
-.fa-apple-whole {
-  font-size: 34px;
+.fa-bug {
+  font-size: 30px;
   color: white;
-}
-.fa-2 {
-  font-size: 34px;
-  color: gold;
 }
 .fa-sack-dollar {
   font-size: 25px;
   color: green;
+}
+.fa-handcuffs {
+  font-size: 25px;
+  color: black;
 }
 div {
   display: flex;
@@ -50,7 +50,7 @@ div {
 }
 
 .game-over {
-  font-size: 45px;
+  font-size: 35px;
   display: none;
   flex-direction: column;
   align-self: center;
@@ -61,7 +61,7 @@ div {
   color: white;
 }
 .level {
-  font-size: 45px;
+  font-size: 25px;
   display: flex;
   flex-direction: column;
   align-self: center;
@@ -75,6 +75,7 @@ div {
   display: flex;
   width: 630px;
   justify-content: space-around;
+  flex-wrap: wrap;
 }
 .level div button {
   color: #ffe3a5;
@@ -89,8 +90,12 @@ div {
   border-radius: 10px;
 }
 .restart-btn {
-  font-size: 30px;
+  font-size: 20px;
+  padding: 15px 10px;
   border-radius: 10px;
+}
+.restart-btn:hover {
+  cursor: pointer;
 }
 
 .right-side,
@@ -108,15 +113,26 @@ div {
   background-color: #313131;
   box-shadow: 8px 16px 16px hsl(0deg 0% 0% / 0.25);
   text-align: center;
-  font-size: 35px;
-  padding: 15px 0px;
+  font-size: 25px;
+  padding: 20px 0px;
   border-radius: 10px;
 }
 
 button {
-  font-family: 'Play', sans-serif;
+  font-family: 'Dune Rise', sans-serif;
 }
 
 audio {
   display: none;
+}
+
+.cowboy {
+  display: none;
+}
+.double-meter {
+  justify-self: flex-end;
+  background-color: gold;
+  width: 0px;
+  height: 3px;
+  position: absolute;
 }

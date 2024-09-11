@@ -1,22 +1,23 @@
 let sandworm = [] // the snake nested array [[column, row], [column, row], [column, row]]
 let direction = ''
-let counter = 1 //counter for the initial length of the snake
-let sandwormLenght = 4 //the length for the counter
+let counter = 0 //counter for the initial length of the snake
+let sandwormLenght = 3 //the length for the counter
 let moving = false //to indicate if the snake can move
 
-//apple variable
+//apple variables
 let apple = [] //to store the apple position [column, row]
 let appleExist = false //  indicator to see if there is an apple in the grid
 let score = 0
 let appleShape //apple position queryselector
 
-//double point variable
-let double = [] //to store the apple position [column, row]
-let doublePoint = false //to indicate if the double point exisit in the grid
+//double point variables
+let double = []
+let doublePointExist = false
 let doublePointActive //to indicate that the double point is activated
-let doubleRate //the rate of the double to appears
-let doubleShape //double shape
+let doubleRate
+let doubleShape
 
+//police variables
 let police = []
 let policeExist = false
 let policeShape //double shape
@@ -68,6 +69,8 @@ const levelselector = document.querySelector('.level')
 const main = document.querySelector('main')
 const soundtrack = document.querySelector('.soundtrack')
 const busted = document.querySelector('.busted')
+const eatSound = document.querySelector('.eat-apple')
+const moneySound = document.querySelector('.eat-money')
 
 const gridColor = () => {
   moving = true
@@ -84,7 +87,7 @@ const gridColor = () => {
     }
   }
   const background = document.querySelector('.game-part')
-  background.style.backgroundImage = 'url(images/download.jpeg)'
+  background.style.backgroundImage = 'url(images/home.jpg)'
   document.querySelector('.title h1').innerText = 'Sandworm'
   soundtrack.pause()
 }
@@ -123,16 +126,17 @@ const pythonLevel = () => {
 const cowboyLevel = () => {
   sandwormSpeed = 100
   level = 'Cowboy'
-  bestScoreLabel.innerText = `Cowboy: ${pythonBest}`
+  bestScoreLabel.innerText = `Cowboy: $${cowboyBest}`
   boardColor = '#E1C8A8'
-  boardColor2 = '#E1C8A8'
+  boardColor2 = '#DCC3A2 '
   headColor = 'brown'
   bodyColor = 'white'
   gridColor()
   const background = document.querySelector('.game-part')
   background.style.backgroundImage = 'url(images/rdr2.jpg)'
   document.querySelector('.title h1').innerText = 'Cowboy'
-  // soundtrack.play()
+  soundtrack.currentTime = 0
+  soundtrack.play()
   scoreLabel.innerText = `Money: $00`
 }
 snakeBtn.addEventListener('click', snakeLevel)
@@ -146,6 +150,7 @@ const bestScoreLabel = document.querySelector('.best-score-label')
 bestScoreLabel.innerText = `Best score: 0`
 const restartBtn = document.querySelector('.restart-btn')
 
+//craete the grid
 for (let i = 0; i < width; i++) {
   let section = document.createElement('section')
   section.setAttribute('id', `c${i}`)
@@ -159,8 +164,9 @@ for (let i = 0; i < width; i++) {
 }
 const gameOverLabel = document.querySelector('.game-over')
 
+//move the sandworm into the next position
 const sandwormMove = () => {
-  sandworm.push([...startPosition]) //from geek
+  sandworm.push([...startPosition]) //push the new position into the sandworm array
   const cell = document.querySelector(
     `#c${startPosition[0]} div:nth-child(${startPosition[1] + 1})`
   )
@@ -176,9 +182,9 @@ const sandwormMove = () => {
     cell.style.backgroundColor = bodyColor
   }
 }
-
+let shift
 const sandwormEnds = () => {
-  let shift = sandworm.shift()
+  shift = sandworm.shift()
   const cellShift = document.querySelectorAll(`#c${shift[0]} div`)
   cellShift[shift[1]].style.borderRadius = '0px'
   if ((shift[0] + shift[1]) % 2 === 0) {
@@ -197,43 +203,46 @@ const addApple = () => {
     let r = Math.floor(Math.random() * height)
     apple = [c, r]
     appleExist = true
-  } while (sandworm.find(isThereApple))
+  } while (sandworm.find(isThereApple)) //if the apple position is above the sandworm body, keep generating new position
   appleShape = document.querySelector(
     `#c${apple[0]} :nth-child(${apple[1] + 1})`
   )
-  appleShape.innerHTML = '<i class="fa-solid fa-apple-whole"></i>'
+  appleShape.innerHTML = '<i class="fa-solid fa-bug"></i>' //apple icon
   if (level === 'Cowboy')
-    appleShape.innerHTML = '<i class="fa-solid fa-sack-dollar"></i>'
+    appleShape.innerHTML = '<i class="fa-solid fa-sack-dollar"></i>' //money bag icon
 }
 
+//this function check if the generated apple position is the same as the sandworm body
 const isThereApple = (position) => {
-  //Source: MDN
   if (position[0] === apple[0] && position[1] === apple[1]) {
     return true
   } else return false
 }
 
+//add the double point randomly in the grid
 const addDouble = () => {
-  //syntax from MDN web
   do {
     let c = Math.floor(Math.random() * width)
     let r = Math.floor(Math.random() * height)
     double = [c, r]
-    doublePoint = true
+    doublePointExist = true
   } while (sandworm.find(isThereDouble))
   doubleShape = document.querySelector(
     `#c${double[0]} :nth-child(${double[1] + 1})`
   )
-  doubleShape.innerHTML = '<i class="fa-solid fa-2"></i>'
+  doubleShape.innerHTML = 'X2'
+  doubleShape.style.fontSize = '17px'
+  doubleShape.style.color = 'gold'
+  if (level === 'Cowboy') doubleShape.style.color = 'red'
 }
 const isThereDouble = (position) => {
-  //Source: MDN
   if (position[0] === double[0] && position[1] === double[1]) {
     return true
   } else return false
 }
+
+//add the police randomly in the grid
 const addPolice = () => {
-  //syntax from MDN web
   do {
     let c = Math.floor(Math.random() * width)
     let r = Math.floor(Math.random() * height)
@@ -246,7 +255,6 @@ const addPolice = () => {
   policeShape.innerHTML = '<i class="fa-solid fa-handcuffs"></i>'
 }
 const isTherePolice = (position) => {
-  //Source: MDN
   if (position[0] === police[0] && position[1] === police[1]) {
     return true
   } else return false
@@ -266,18 +274,20 @@ const gameOver = () => {
   gameOverLabel.style.display = 'flex'
   let gameOverText = document.querySelector('.game-over h1')
   if (caught === true) {
+    //if the player hit the police show this game over messagw
     gameOverText.innerText = ''
     gameOverText.style.width = '555px'
     gameOverText.style.height = '150px'
     gameOverText.style.backgroundImage = 'url(images/wasted.png)'
     gameOverText.style.backgroundSize = 'cover'
+    caught = false
   } else {
     gameOverText.style.backgroundImage = 'none'
     gameOverText.innerText = 'Game Over!'
     gameOverText.style.width = 'auto'
     gameOverText.style.height = 'auto'
   }
-  moving = false
+  moving = false //stop moving and clear all interval
   clearInterval(stopWatchInterval)
   clearInterval(upInterval)
   clearInterval(downInterval)
@@ -295,41 +305,59 @@ const appleEaten = () => {
     appleShape.innerHTML = ''
     if (doublePointActive === true) {
       score += 10
+      sandworm.unshift([...shift]) //unshif the shifted position so it will increase the sandworm lenght by 2
     }
     score += 10
 
     scoreLabel.innerText = `Score: ${score}` //update score in html and best score
     if (level === 'Snake' && score > snakeBest) {
+      eatSound.play()
       bestScoreLabel.innerText = `Snake: ${score}`
     } else if (level === 'Sandworm' && score > sandwormBest) {
+      eatSound.play()
       bestScoreLabel.innerText = `Sandworm: ${score}`
     } else if (level === 'Python' && score > pythonBest) {
+      eatSound.play()
       bestScoreLabel.innerText = `Python: ${score}`
-    } else if (level === 'Cowboy' && score > pythonBest) {
-      scoreLabel.innerText = `Money: $${score}` //update score in html and best score
-      bestScoreLabel.innerText = `Cowboy: ${score}`
+    } else if (level === 'Cowboy') {
+      moneySound.play()
+      scoreLabel.innerText = `Money: $${score}`
+      if (score > cowboyBest) {
+        //update score in html and best score
+        bestScoreLabel.innerText = `Cowboy: $${score}`
+      }
     }
     addApple()
     doubleRate = Math.floor(Math.random() * 10) //generate the double point rate and call the function
-    if (doubleRate === 1 && doublePoint === false) addDouble()
-    if (doubleRate < 3 && policeExist === false) addPolice()
+    if (doubleRate === 1 && doublePointExist === false) addDouble()
+    if (level === 'Cowboy' && doubleRate < 3 && policeExist === false)
+      addPolice()
   } else if (counter >= sandwormLenght) {
     sandwormEnds()
   }
 }
 
 //check if the double point is collected
+const doubleMeter = document.querySelector('.double-meter')
 const doubleCollected = () => {
   if (
     sandworm[sandworm.length - 1][0] === double[0] &&
     sandworm[sandworm.length - 1][1] === double[1]
   ) {
     doubleShape.innerHTML = ''
-    doublePointActive = true //activate double point, after 5 seconde deactivate
+    doublePointActive = true //activate double point, deactivate after 7 seconds
+    doubleMeter.style.backgroundColor = 'gold'
+    if (level === 'Cowboy') doubleMeter.style.backgroundColor = 'red'
+    let meterWidth = 630 //interval to decrease the meter by 1 for 7 seconds
+    let doubleInterval = setInterval(() => {
+      doubleMeter.style.width = `${meterWidth--}px`
+    }, 7000 / 630)
     setTimeout(() => {
       doublePointActive = false
-      doublePoint = false
-    }, 5000)
+      doublePointExist = false
+      clearInterval(doubleInterval)
+      meterWidth = 630
+    }, 7000)
   }
 }
 
@@ -338,6 +366,7 @@ let policeTime = true
 const policeCaught = () => {
   if (policeTime) {
     setTimeout(() => {
+      //make the police appears for 10 seconds
       policeShape.innerHTML = ''
       policeExist = false
       police = []
@@ -346,6 +375,7 @@ const policeCaught = () => {
   }
   policeTime = false
   if (
+    //if the player hit the police icon
     sandworm[sandworm.length - 1][0] === police[0] &&
     sandworm[sandworm.length - 1][1] === police[1]
   ) {
@@ -356,17 +386,20 @@ const policeCaught = () => {
   }
 }
 
+//move functions, check if the next position is outside the grid 'game over'
 const moveRight = () => {
   if (startPosition[0] + 1 < width) {
-    startPosition[0]++
+    startPosition[0]++ //increase the column [c,r]
     sandwormMove()
     checkEatSelf()
     if (appleExist === false) {
+      //don't add apple if there is apple in the grid
       addApple()
     }
     appleEaten()
     doubleCollected()
     if (policeExist === true) {
+      //don't add apple if there is police in the grid
       policeCaught()
     }
     counter++
@@ -376,7 +409,7 @@ const moveRight = () => {
 }
 const moveUp = () => {
   if (startPosition[1] - 1 > -1) {
-    startPosition[1]--
+    startPosition[1]-- //decrease the row [c,r]
     sandwormMove()
     checkEatSelf()
     if (appleExist === false) {
@@ -395,7 +428,7 @@ const moveUp = () => {
 
 const moveLeft = () => {
   if (startPosition[0] - 1 > -1) {
-    startPosition[0]--
+    startPosition[0]-- //decrease the column [c,r]
     sandwormMove()
     checkEatSelf()
     if (appleExist === false) {
@@ -414,7 +447,7 @@ const moveLeft = () => {
 
 const moveDown = () => {
   if (startPosition[1] + 1 < height) {
-    startPosition[1]++
+    startPosition[1]++ //increase the row [c,r]
     sandwormMove()
     checkEatSelf()
     if (appleExist === false) {
@@ -438,6 +471,7 @@ const stopWatch = () => {
     secondes = 0
     minutes++
   }
+  // to always make sure that the time display as 00:00 double digits
   if (secondes <= 9 && minutes <= 9) {
     stopWatchLabel.innerText = `Time 0${minutes}:0${secondes}`
   } else if (secondes <= 9) {
@@ -466,8 +500,11 @@ const restart = () => {
   sandworm = []
   direction = ''
   startPosition = [Math.floor(width / 2), Math.floor(height / 2)]
-  counter = 1
+  counter = 0
   appleExist = false
+  doublePointExist = false
+  policeExist = false
+  doublePointActive = false
   levelselector.style.display = 'flex'
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < height; j++) {
@@ -481,7 +518,6 @@ const restart = () => {
   secondes = 0
   minutes = 0
   stopWatchStart = false
-
   if (level === 'Snake' && score > snakeBest) {
     snakeBest = score
     bestScoreLabel.innerText = `Snake: ${score}`
@@ -491,6 +527,12 @@ const restart = () => {
   } else if (level === 'Python' && score > pythonBest) {
     pythonBest = score
     bestScoreLabel.innerText = `Python: ${score}`
+  } else if (level === 'Cowboy' && score > cowboyBest) {
+    cowboyBest = score
+    bestScoreLabel.innerText = `Cowboy: $${score}`
+  }
+  if (pythonBest > 100) {
+    cowboyBtn.style.display = 'block'
   }
   score = 0
   gameOverLabel.style.display = 'none'
@@ -498,7 +540,7 @@ const restart = () => {
 
 restartBtn.addEventListener('click', restart)
 
-let keyPress = 0
+let keyPress = 0 //to delay the input
 let coolDown = 100
 //source: geeksforgeeks
 window.addEventListener('keydown', (arrow) => {
@@ -510,7 +552,6 @@ window.addEventListener('keydown', (arrow) => {
   } else if (level === 'Python') {
     coolDown = sandwormSpeed + 5 //python
   }
-
   if (currentTime - keyPress < coolDown) {
     return
   }

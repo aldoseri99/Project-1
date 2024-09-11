@@ -1,12 +1,30 @@
 # Sandworm Game
 
-![image](https://i.imgur.com/U2HvfDk.png)
+## Date: 9/12/2024
 
-## **_Description_**
+### By: Ali Aldoseri
 
-It’s a classic Snake-style game where you control a sandworm moving around the board, trying to eat the apple while avoiding collisions with yourself or the edges of the board.
+---
 
-## **_How to get started_**
+### **_Description_**
+
+It’s a classic Snake-style game where you control a sandworm moving around the board, trying to eat the apple while avoiding collisions with yourself or the edges of the board. There are three levels: Snake (slowest), Sandworm (medium speed), and Python (fastest). A hidden level called "Cowboy" will unlock if the score in the Python level exceeds 100 score point.
+
+---
+
+### **_Technologies Used_**
+
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- Git & GitHub
+- Font Awesome
+- Images
+- Sound Effects
+
+---
+
+### **_Getting Started_**
 
 ### Start the Game
 
@@ -20,4 +38,25 @@ It’s a classic Snake-style game where you control a sandworm moving around the
 - Winning: The game is won if the sandworm fills the entire board.
 - Losing: The game ends if the sandworm collides with itself or the edges of the board.
 
-## **_Credits_**
+---
+
+### **_Screenshots_**
+
+![image](screenshots/Page1.png)
+![image](screenshots/Page2.png)
+![image](screenshots/Page3.png)
+![image](screenshots/Page4.png)
+
+---
+
+### **_Credits_**
+
+- **HTML, CSS, JS**: [W3Schools](https://www.w3schools.com/)
+- **JavaScript**: [MDN Web Docs](https://developer.mozilla.org/en-US/)
+- **JavaScript**: [GeeksforGeeks](https://www.geeksforgeeks.org/)
+- **Images**: [Google](https://www.google.com/)
+- **Icons**: [Font Awesome](https://fontawesome.com/)
+- **Fonts**: [CDNFonts](https://www.cdnfonts.com/)
+- **Sound Effects**:
+  - [YouTube](https://www.youtube.com/)
+  - [ZapSplat](https://www.zapsplat.com/)
