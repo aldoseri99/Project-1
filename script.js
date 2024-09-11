@@ -8,14 +8,20 @@ let moving = false //to indicate if the snake can move
 let apple = [] //to store the apple position [column, row]
 let appleExist = false //  indicator to see if there is an apple in the grid
 let score = 0
-let appleShape //apple icon
+let appleShape //apple position queryselector
 
 //double point variable
 let double = [] //to store the apple position [column, row]
 let doublePoint = false //to indicate if the double point exisit in the grid
 let doublePointActive //to indicate that the double point is activated
 let doubleRate //the rate of the double to appears
-let doublePlace //double shape
+let doubleShape //double shape
+
+let police = []
+let policeExist = false
+let policeShape //double shape
+let caught = false //check if the player has been caught for the gameover text
+
 //Timer that increase with each score point collected called time attack
 
 // stop watch variables
@@ -56,9 +62,12 @@ const stopWatchLabel = document.querySelector('.time-label')
 const snakeBtn = document.querySelector('.snake')
 const sandwormBtn = document.querySelector('.sandworm')
 const pythonBtn = document.querySelector('.python')
+const cowboyBtn = document.querySelector('.cowboy')
 const levelselector = document.querySelector('.level')
 
 const main = document.querySelector('main')
+const soundtrack = document.querySelector('.soundtrack')
+const busted = document.querySelector('.busted')
 
 const gridColor = () => {
   moving = true
@@ -74,30 +83,62 @@ const gridColor = () => {
       }
     }
   }
+  const background = document.querySelector('.game-part')
+  background.style.backgroundImage = 'url(images/download.jpeg)'
+  document.querySelector('.title h1').innerText = 'Sandworm'
+  soundtrack.pause()
 }
 
 const snakeLevel = () => {
   sandwormSpeed = 250
   level = 'Snake'
   bestScoreLabel.innerText = `Snake: ${snakeBest}`
+  boardColor = '#3A2C1D'
+  boardColor2 = '#4E3B2D'
+  headColor = '#A65C3A'
+  bodyColor = '#D4B49D'
   gridColor()
 }
 const sandwormLevel = () => {
   sandwormSpeed = 175
   level = 'Sandworm'
   bestScoreLabel.innerText = `Sandworm: ${sandwormBest}`
+  boardColor = '#3A2C1D'
+  boardColor2 = '#4E3B2D'
+  headColor = '#A65C3A'
+  bodyColor = '#D4B49D'
   gridColor()
 }
 const pythonLevel = () => {
   sandwormSpeed = 100
   level = 'Python'
   bestScoreLabel.innerText = `Python: ${pythonBest}`
+  boardColor = '#3A2C1D'
+  boardColor2 = '#4E3B2D'
+  headColor = '#A65C3A'
+  bodyColor = '#D4B49D'
   gridColor()
 }
 
+const cowboyLevel = () => {
+  sandwormSpeed = 100
+  level = 'Cowboy'
+  bestScoreLabel.innerText = `Cowboy: ${pythonBest}`
+  boardColor = '#E1C8A8'
+  boardColor2 = '#E1C8A8'
+  headColor = 'brown'
+  bodyColor = 'white'
+  gridColor()
+  const background = document.querySelector('.game-part')
+  background.style.backgroundImage = 'url(images/rdr2.jpg)'
+  document.querySelector('.title h1').innerText = 'Cowboy'
+  // soundtrack.play()
+  scoreLabel.innerText = `Money: $00`
+}
 snakeBtn.addEventListener('click', snakeLevel)
 sandwormBtn.addEventListener('click', sandwormLevel)
 pythonBtn.addEventListener('click', pythonLevel)
+cowboyBtn.addEventListener('click', cowboyLevel)
 
 const scoreLabel = document.querySelector('.score-label')
 scoreLabel.innerText = 'Score: 00'
@@ -129,6 +170,9 @@ const sandwormMove = () => {
     const cell = document.querySelector(
       `#c${sandworm[i][0]} div:nth-child(${sandworm[i][1] + 1})`
     )
+    if (level === 'Cowboy') {
+      cell.innerHTML = `<i class="fa-solid fa-sack-dollar"></i>`
+    }
     cell.style.backgroundColor = bodyColor
   }
 }
@@ -141,6 +185,9 @@ const sandwormEnds = () => {
     cellShift[shift[1]].style.backgroundColor = `${boardColor}`
   } else {
     cellShift[shift[1]].style.backgroundColor = `${boardColor2}`
+  }
+  if (level === 'Cowboy') {
+    cellShift[shift[1]].innerHTML = ``
   }
 }
 
@@ -155,6 +202,8 @@ const addApple = () => {
     `#c${apple[0]} :nth-child(${apple[1] + 1})`
   )
   appleShape.innerHTML = '<i class="fa-solid fa-apple-whole"></i>'
+  if (level === 'Cowboy')
+    appleShape.innerHTML = '<i class="fa-solid fa-sack-dollar"></i>'
 }
 
 const isThereApple = (position) => {
@@ -172,14 +221,33 @@ const addDouble = () => {
     double = [c, r]
     doublePoint = true
   } while (sandworm.find(isThereDouble))
-  doublePlace = document.querySelector(
+  doubleShape = document.querySelector(
     `#c${double[0]} :nth-child(${double[1] + 1})`
   )
-  doublePlace.innerHTML = '<i class="fa-solid fa-2"></i>'
+  doubleShape.innerHTML = '<i class="fa-solid fa-2"></i>'
 }
 const isThereDouble = (position) => {
   //Source: MDN
   if (position[0] === double[0] && position[1] === double[1]) {
+    return true
+  } else return false
+}
+const addPolice = () => {
+  //syntax from MDN web
+  do {
+    let c = Math.floor(Math.random() * width)
+    let r = Math.floor(Math.random() * height)
+    police = [c, r]
+    policeExist = true
+  } while (sandworm.find(isTherePolice))
+  policeShape = document.querySelector(
+    `#c${police[0]} :nth-child(${police[1] + 1})`
+  )
+  policeShape.innerHTML = '<i class="fa-solid fa-handcuffs"></i>'
+}
+const isTherePolice = (position) => {
+  //Source: MDN
+  if (position[0] === police[0] && position[1] === police[1]) {
     return true
   } else return false
 }
@@ -196,6 +264,19 @@ const checkEatSelf = () => {
 
 const gameOver = () => {
   gameOverLabel.style.display = 'flex'
+  let gameOverText = document.querySelector('.game-over h1')
+  if (caught === true) {
+    gameOverText.innerText = ''
+    gameOverText.style.width = '555px'
+    gameOverText.style.height = '150px'
+    gameOverText.style.backgroundImage = 'url(images/wasted.png)'
+    gameOverText.style.backgroundSize = 'cover'
+  } else {
+    gameOverText.style.backgroundImage = 'none'
+    gameOverText.innerText = 'Game Over!'
+    gameOverText.style.width = 'auto'
+    gameOverText.style.height = 'auto'
+  }
   moving = false
   clearInterval(stopWatchInterval)
   clearInterval(upInterval)
@@ -224,10 +305,14 @@ const appleEaten = () => {
       bestScoreLabel.innerText = `Sandworm: ${score}`
     } else if (level === 'Python' && score > pythonBest) {
       bestScoreLabel.innerText = `Python: ${score}`
+    } else if (level === 'Cowboy' && score > pythonBest) {
+      scoreLabel.innerText = `Money: $${score}` //update score in html and best score
+      bestScoreLabel.innerText = `Cowboy: ${score}`
     }
     addApple()
     doubleRate = Math.floor(Math.random() * 10) //generate the double point rate and call the function
     if (doubleRate === 1 && doublePoint === false) addDouble()
+    if (doubleRate < 3 && policeExist === false) addPolice()
   } else if (counter >= sandwormLenght) {
     sandwormEnds()
   }
@@ -239,12 +324,35 @@ const doubleCollected = () => {
     sandworm[sandworm.length - 1][0] === double[0] &&
     sandworm[sandworm.length - 1][1] === double[1]
   ) {
-    doublePlace.innerHTML = ''
+    doubleShape.innerHTML = ''
     doublePointActive = true //activate double point, after 5 seconde deactivate
     setTimeout(() => {
       doublePointActive = false
       doublePoint = false
     }, 5000)
+  }
+}
+
+//check if the double point is collected
+let policeTime = true
+const policeCaught = () => {
+  if (policeTime) {
+    setTimeout(() => {
+      policeShape.innerHTML = ''
+      policeExist = false
+      police = []
+      policeTime = true
+    }, 10000)
+  }
+  policeTime = false
+  if (
+    sandworm[sandworm.length - 1][0] === police[0] &&
+    sandworm[sandworm.length - 1][1] === police[1]
+  ) {
+    soundtrack.pause()
+    busted.play()
+    caught = true
+    gameOver()
   }
 }
 
@@ -258,6 +366,9 @@ const moveRight = () => {
     }
     appleEaten()
     doubleCollected()
+    if (policeExist === true) {
+      policeCaught()
+    }
     counter++
   } else {
     gameOver()
@@ -273,6 +384,9 @@ const moveUp = () => {
     }
     appleEaten()
     doubleCollected()
+    if (policeExist === true) {
+      policeCaught()
+    }
     counter++
   } else {
     gameOver()
@@ -289,6 +403,9 @@ const moveLeft = () => {
     }
     appleEaten()
     doubleCollected()
+    if (policeExist === true) {
+      policeCaught()
+    }
     counter++
   } else {
     gameOver()
@@ -305,6 +422,9 @@ const moveDown = () => {
     }
     appleEaten()
     doubleCollected()
+    if (policeExist === true) {
+      policeCaught()
+    }
     counter++
   } else {
     gameOver()

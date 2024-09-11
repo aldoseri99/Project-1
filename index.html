@@ -27,15 +27,16 @@
       </div>
       <main>
         <div class="level">
-          Choose level
+          <h1>Choose level</h1>
           <div>
             <button class="snake">Snake</button>
             <button class="sandworm">Sandworm</button>
             <button class="python">Python</button>
+            <button class="cowboy">Cowboy</button>
           </div>
         </div>
         <div class="game-over">
-          Game Over!
+          <h1>Game Over!</h1>
           <button class="restart-btn">Restart</button>
         </div>
         <div class="board"></div>
@@ -45,5 +46,11 @@
         <h1 class="time-label">Time: 00:00</h1>
       </div>
     </div>
+    <audio class="soundtrack" controls>
+      <source src="sfx/rdr2-theme.mp3" type="audio/mpeg" />
+    </audio>
+    <audio class="busted" controls>
+      <source src="sfx/busted.mp3" type="audio/mpeg" />
+    </audio>
   </body>
 </html>
