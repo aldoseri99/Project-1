@@ -35,6 +35,14 @@ main {
   font-size: 34px;
   color: white;
 }
+.fa-2 {
+  font-size: 34px;
+  color: gold;
+}
+.fa-sack-dollar {
+  font-size: 34px;
+  color: green;
+}
 div {
   display: flex;
   justify-content: center;
@@ -102,6 +110,7 @@ div {
   text-align: center;
   font-size: 35px;
   padding: 15px 0px;
+  border-radius: 10px;
 }
 
 button {
